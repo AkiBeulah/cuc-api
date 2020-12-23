@@ -14,7 +14,6 @@ gem 'rack-cors'
 gem 'devise_token_auth'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'pry-rails'
   %w[rspec-core rspec-rails rspec-expectations rspec-mocks rspec-support].each do |lib|
     gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
   end
