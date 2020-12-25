@@ -12,6 +12,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'rack-cors'
 gem 'devise_token_auth'
+gem 'pg_search'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   %w[rspec-core rspec-rails rspec-expectations rspec-mocks rspec-support].each do |lib|

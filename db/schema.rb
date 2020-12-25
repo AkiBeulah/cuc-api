@@ -10,10 +10,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_21_205112) do
+ActiveRecord::Schema.define(version: 2020_12_23_211435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "announcements", force: :cascade do |t|
+    t.string "title"
+    t.string "subtitle"
+    t.text "body"
+    t.integer "level", null: false
+    t.string "department", default: "all", null: false
+    t.string "college", default: "all", null: false
+    t.string "hall", default: "all", null: false
+    t.string "program", default: "all", null: false
+    t.string "url"
+    t.date "expiry", default: "2021-01-01", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "course_enrollment", force: :cascade do |t|
+    t.bigint "course_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_course_enrollment_on_course_id"
+    t.index ["user_id"], name: "index_course_enrollment_on_user_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "course_code", limit: 6
+    t.text "course_description"
+    t.string "course_grouping"
+    t.integer "course_unit"
+    t.integer "course_unit_temp"
+    t.string "status"
+    t.string "semester"
+    t.string "prerequisite"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "timetables", force: :cascade do |t|
     t.string "course_code"

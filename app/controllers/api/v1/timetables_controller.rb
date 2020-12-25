@@ -1,27 +1,36 @@
 require 'csv'
-require 'pathname'
 
 module Api
   module V1
     class TimetablesController < ApplicationController
       before_action :set_timetable, only: [:show, :update, :destroy]
-      before_action :authenticate_user, only: [:filter]
+      # before_action :authenticate_api_user!, only: [:filter]
 
       # GET /timetables
       # GET /timetables.json
       def index
-        @timetables = Timetable.all
+        render json: Timetable.all, status: :ok
       end
 
       # GET /timetables/1
       # GET /timetables/1.json
       def filter
-
+        render json: Timetable.where(day: params[:day]), status: :ok
       end
 
       # POST /timetables
       # POST /timetables.json
       def create
+        @timetable = Timetable.new(timetable_params)
+
+        if @timetable.save!
+          render json: @timetable, status: :ok
+        else
+          render json: @timetable.errors, status: :unprocessable_entity
+        end
+      end
+
+      def bulk_create
         counter = []
 
         params[:csv].each do |csv|
@@ -54,7 +63,6 @@ module Api
         end
       end
 
-
       # PATCH/PUT /timetables/1
       # PATCH/PUT /timetables/1.json
       def update
@@ -80,7 +88,15 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def timetable_params
-        params.require(:timetable).permit(:csv, :name)
+        params.require(:timetable).permit(:course_code, :building, :venue, :time, :day, :session)
+      end
+
+      def timetable_csv_param
+        param.require(:timetable).permit(:csv)
+      end
+
+      def timetable_filter_params
+        params.require(:timetable).permit(:day)
       end
     end
   end
