@@ -33,18 +33,18 @@ module Api
 
         params[:csv].each do |csv|
           CSV.foreach(csv, headers: true) do |row|
-            if row[i]
+            if row[0]
               @ann = Announcement.new(
                   title: row[0],
                   subtitle: row[1],
                   body: row[2],
-                  level: row[3],
+                  level: row[3] ||= 0,
                   url: row[4],
-                  department: row[5],
-                  college: row[6],
-                  hall: row[7],
-                  program: row[8],
-                  expiry: row[9]
+                  department: row[5] ||= "all",
+                  college: row[6] ||= "all",
+                  hall: row[7] ||= "all",
+                  program: row[8] ||= "all",
+                  expiry: row[9] ||= DateTime.now + 1.week
               )
 
               unless @ann.save!

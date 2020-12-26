@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_211435) do
     t.string "title"
     t.string "subtitle"
     t.text "body"
-    t.integer "level", null: false
+    t.integer "level", default: 0, null: false
     t.string "department", default: "all", null: false
     t.string "college", default: "all", null: false
     t.string "hall", default: "all", null: false
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_211435) do
 
   create_table "courses", force: :cascade do |t|
     t.string "course_code", limit: 6
+    t.string "course_title"
     t.text "course_description"
     t.string "course_grouping"
     t.integer "course_unit"

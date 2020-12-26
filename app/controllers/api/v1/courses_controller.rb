@@ -28,6 +28,38 @@ module Api
         end
       end
 
+      def bulk_create
+        counter = []
+
+        params[:csv].each do |csv|
+          CSV.foreach(csv, headers: true, encoding:'iso-8859-1:utf-8') do |row|
+            if row[0]
+              @course = Course.new(
+                  course_code: row[1],
+                  course_description: row[7],
+                  course_grouping: row[0],
+                  course_unit: row[4],
+                  course_title: row[2],
+                  course_unit_temp: 0,
+                  status: row[3],
+                  semester: row[6],
+                  prerequisite: row[5]
+              )
+
+              unless @course.save!
+                counter.push(@course.errors)
+              end
+            end
+          end
+        end
+
+        if counter.empty?
+          render json: Course.all, status: :ok
+        else
+          render json: {message: "There were some errors...", errors: counter}, status: :ok
+        end
+      end
+
       # PATCH/PUT /courses/1
       # PATCH/PUT /courses/1.json
       def update
@@ -45,6 +77,7 @@ module Api
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_course
         @course = Course.find(params[:id])
@@ -53,6 +86,10 @@ module Api
       # Only allow a list of trusted parameters through.
       def course_params
         params.require(:course).permit(:course_code, :course_description, :course_unit, :course_unit_temp, :status, :semester)
+      end
+
+      def course_csv_params
+        params.require(:course).permit(:csv)
       end
     end
 
