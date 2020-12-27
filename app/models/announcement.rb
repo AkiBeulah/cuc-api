@@ -1,4 +1,12 @@
 class Announcement < ApplicationRecord
-	include PgSearch::Model
-	multisearchable against: [:title, :subtitle, :body, :level, :department, :college, :hall, :program]
+	include PgSearch #::Model
+	pg_search_scope :search, against:
+			{
+					title: 'A',
+					subtitle: 'B',
+					body: 'C',
+					level: 'D'
+			}#, :department, :college, :hall, :program
+
+
 end

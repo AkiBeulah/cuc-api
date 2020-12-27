@@ -1,4 +1,11 @@
 class Course < ApplicationRecord
-	include PgSearch::Model
-	multisearchable against: [:course_code, :course_title, :course_description, :prerequisite]
+	include PgSearch#::Model
+	pg_search_scope :search, against: {
+			course_code: 'A',
+			course_title: 'B',
+			semester: 'C',
+			prerequisite: 'D'
+	}#, :course_description, :course_grouping, :course_unit
+
+
 end

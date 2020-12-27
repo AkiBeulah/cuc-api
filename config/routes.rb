@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       resources :courses
       post '/courses/bulk_create', to: 'courses#bulk_create'
 
-			post '/query', to: 'base#query'
+			get '/search/', to: 'base#query'
     end
   end
 end
