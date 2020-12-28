@@ -6,7 +6,11 @@ class Timetable < ApplicationRecord
 					time: 'B',
 					venue: 'C',
 					building: 'D'
-			}
+			}, using: {
+			:tsearch => {:prefix => true, :any_word => true, :negation => true},
+			:trigram => {}
+	}
+
 
 	validates :time, presence: true
 	validates :building, presence: true

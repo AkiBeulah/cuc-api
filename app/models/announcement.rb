@@ -6,7 +6,10 @@ class Announcement < ApplicationRecord
 					subtitle: 'B',
 					body: 'C',
 					level: 'D'
-			}#, :department, :college, :hall, :program
-
+			}, using: {
+			:tsearch => {:prefix => true, :any_word => true, :negation => true},
+			:trigram => {}
+	}
+	#, :department, :college, :hall, :program
 
 end
