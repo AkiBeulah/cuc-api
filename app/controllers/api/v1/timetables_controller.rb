@@ -1,103 +1,105 @@
 require 'csv'
 
 module Api
-  module V1
-    class TimetablesController < ApplicationController
-      before_action :set_timetable, only: [:show, :update, :destroy]
-      # before_action :authenticate_api_user!, only: [:filter]
+	module V1
+		class TimetablesController < ApplicationController
+			before_action :set_timetable, only: [:show, :update, :destroy]
 
-      # GET /timetables
-      # GET /timetables.json
-      def index
-        render json: Timetable.all, status: :ok
-      end
+			# GET /timetables
+			# GET /timetables.json
+			def index
+				render json: Timetable.all, status: :ok
+			end
 
-      # GET /timetables/1
-      # GET /timetables/1.json
-      def filter
-        render json: Timetable.where(day: params[:day]), status: :ok
-      end
+			# GET /timetables/1
+			# GET /timetables/1.json
+			def filter
+				render json: Timetable.where(day: params[:day], level: params[:level]), status: :ok
+			end
 
-      # POST /timetables
-      # POST /timetables.json
-      def create
-        @timetable = Timetable.new(timetable_params)
+			# POST /timetables
+			# POST /timetables.json
+			def create
+				@timetable = Timetable.new(timetable_params)
 
-        if @timetable.save!
-          render json: @timetable, status: :ok
-        else
-          render json: @timetable.errors, status: :unprocessable_entity
-        end
-      end
+				if @timetable.save!
+					render json: @timetable, status: :created
+				else
+					render json: @timetable.errors, status: :unprocessable_entity
+				end
+			end
 
-      def bulk_create
-        counter = []
+			def bulk_create
+				counter = []
 
-        params[:csv].each do |csv|
-          timetable_name = csv.original_filename
-          timetable_headers = CSV.read(csv, :headers => true).headers
-          CSV.foreach(csv, headers: true) do |row|
-            for i in 2..13 do
-              if row[i]
-                @timetable = Timetable.new(
-                    course_code: row[i].downcase!,
-                    building: row[0],
-                    venue: row[1],
-                    time: timetable_headers[i],
-                    day: timetable_name[0, timetable_name.index("_")],
-                    session: timetable_name[timetable_name.index("_") + 1, 8]
-                )
+				params[:csv].each do |csv|
+					timetable_name = csv.original_filename
+					timetable_headers = CSV.read(csv, :headers => true).headers
+					CSV.foreach(csv, headers: true) do |row|
+						for i in 2..13 do
+							if row[i]
+								@timetable = Timetable.new(
+										course_code: row[i].downcase!,
+										building: row[0],
+										venue: row[1],
+										time: timetable_headers[i],
+										day: timetable_name[0, timetable_name.index("_")],
+										session: timetable_name[timetable_name.index("_") + 1],
+										level: row[i][3, 1].to_i * 100
+								)
 
-                unless @timetable.save!
-                  counter.push(@timetable.errors)
-                end
-              end
-            end
-          end
-        end
 
-        if counter.empty?
-          render json: Timetable.all, status: :ok
-        else
-          render json: {message: "There were some errors...", errors: counter}, status: :ok
-        end
-      end
+								authorize @timetable
+								unless @timetable.save!
+									counter.push(@timetable.errors)
+								end
+							end
+						end
+					end
+				end
 
-      # PATCH/PUT /timetables/1
-      # PATCH/PUT /timetables/1.json
-      def update
-        if @timetable.update(timetable_params)
-          render :show, status: :ok, location: @timetable
-        else
-          render json: @timetable.errors, status: :unprocessable_entity
-        end
-      end
+				if counter.empty?
+					render json: Timetable.all, status: :created
+				else
+					render json: {message: "There were some errors...", errors: counter}, status: :ok
+				end
+			end
 
-      # DELETE /timetables/1
-      # DELETE /timetables/1.json
-      def destroy
-        @timetable.destroy
-      end
+			# PATCH/PUT /timetables/1
+			# PATCH/PUT /timetables/1.json
+			def update
+				if @timetable.update(timetable_params)
+					render :show, status: :ok, location: @timetable
+				else
+					render json: @timetable.errors, status: :unprocessable_entity
+				end
+			end
 
-      private
+			# DELETE /timetables/1
+			# DELETE /timetables/1.json
+			def destroy
+				@timetable.destroy
+			end
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_timetable
-        @timetable = Timetable.find(params[:id])
-      end
+			private
 
-      # Only allow a list of trusted parameters through.
-      def timetable_params
-        params.require(:timetable).permit(:course_code, :building, :venue, :time, :day, :session)
-      end
+			# Use callbacks to share common setup or constraints between actions.
+			def set_timetable
+				@timetable = Timetable.find(params[:id])
+			end
 
-      def timetable_csv_param
-        param.require(:timetable).permit(:csv)
-      end
+			# Only allow a list of trusted parameters through.
+			def timetable_params
+				params.require(:timetable).permit(:course_code, :building, :venue, :time, :day, :session)
+			end
 
-      def timetable_filter_params
-        params.require(:timetable).permit(:day)
-      end
-    end
-  end
+			def timetable_csv_param
+				param.require(:timetable).permit(:csv)
+			end
+
+			def timetable_filter_params
+				params.require(:timetable).permit(:day, :level)
+			end
+		end
+	end
 end

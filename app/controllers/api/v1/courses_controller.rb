@@ -22,7 +22,7 @@ module Api
         @course = Course.new(course_params)
 
         if @course.save
-          render :show, status: :created, location: @course
+          render json: @course, status: :created
         else
           render json: @course.errors, status: :unprocessable_entity
         end
@@ -46,6 +46,7 @@ module Api
                   prerequisite: row[5]
               )
 
+              authorize @course
               unless @course.save!
                 counter.push(@course.errors)
               end
@@ -54,7 +55,7 @@ module Api
         end
 
         if counter.empty?
-          render json: Course.all, status: :ok
+          render json: Course.all, status: :created
         else
           render json: {message: "There were some errors...", errors: counter}, status: :ok
         end

@@ -4,15 +4,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
-gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 4.1'
-gem 'jbuilder', '~> 2.7'
-gem 'redis', '~> 4.0'
-gem 'bcrypt', '~> 3.1.7'
+gem 'pg', '>= 0.18', '< 2.0' #database
+gem 'puma', '~> 4.1' #server
+gem 'jbuilder', '~> 2.7' #json rendering
+gem 'redis', '~> 4.0' #websockets
+gem 'bcrypt', '~> 3.1.7' #encryption
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'rack-cors'
-gem 'devise_token_auth'
-gem 'pg_search'
+gem 'rack-cors' # cors
+gem 'devise_token_auth' # authentication
+gem 'pg_search' # full textsearch
+gem 'pundit' # authorization
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   %w[rspec-core rspec-rails rspec-expectations rspec-mocks rspec-support].each do |lib|

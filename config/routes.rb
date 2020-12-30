@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post '/courses/bulk_create', to: 'courses#bulk_create'
 
 			get '/search/', to: 'base#query'
+			post '/student/enroll', to: 'base#student_enroll'
     end
   end
 end

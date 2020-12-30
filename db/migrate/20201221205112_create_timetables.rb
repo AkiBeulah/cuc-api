@@ -7,6 +7,7 @@ class CreateTimetables < ActiveRecord::Migration[6.0]
       t.string :day
       t.string :time, limit: 11
       t.string :session
+      t.string :level
 
       t.timestamps
     end

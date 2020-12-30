@@ -22,7 +22,7 @@ module Api
         @announcement = Announcement.new(announcement_params)
 
         if @announcement.save
-          render :show, status: :created, location: @announcement
+          render json: @announcement, status: :created
         else
           render json: @announcement.errors, status: :unprocessable_entity
         end
@@ -55,7 +55,7 @@ module Api
         end
 
         if counter.empty?
-          render json: Announcement.all, status: :ok
+          render json: Announcement.all, status: :created
         else
           render json: {message: "There were some errors...", errors: counter}, status: :ok
         end
