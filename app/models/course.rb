@@ -11,6 +11,14 @@ class Course < ApplicationRecord
 	}
 	#, :course_description, :course_grouping, :course_unit ]
 
-	has_many :course_enrollments
-	has_many :courses, through: :course_enrollments
+	has_many :users
+	has_many :users, through: :course_enrollments
+
+	validates :course_code, presence: true, uniqueness: true
+	validates :course_title, presence: true, uniqueness: true
+	validates :course_grouping, presence: true
+	validates :course_unit, presence: true
+	validates :course_unit_temp, presence: true
+	validates :status, presence: true
+	validates :semester, presence: true
 end

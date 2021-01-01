@@ -33,9 +33,5 @@ module CucApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-
-    config.to_prepare do
-      Devise::SessionsController.skip_before_action :authenticate_api_user, only: :create
-    end
   end
 end

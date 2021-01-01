@@ -26,18 +26,18 @@ ActiveRecord::Schema.define(version: 2020_12_28_220703) do
     t.string "hall", default: "all", null: false
     t.string "program", default: "all", null: false
     t.string "url"
-    t.date "expiry", default: "2021-01-04", null: false
+    t.date "expiry", default: "2021-01-07", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "course_enrollment", force: :cascade do |t|
+  create_table "course_enrollments", force: :cascade do |t|
     t.bigint "course_id"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["course_id"], name: "index_course_enrollment_on_course_id"
-    t.index ["user_id"], name: "index_course_enrollment_on_user_id"
+    t.index ["course_id"], name: "index_course_enrollments_on_course_id"
+    t.index ["user_id"], name: "index_course_enrollments_on_user_id"
   end
 
   create_table "courses", force: :cascade do |t|

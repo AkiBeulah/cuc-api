@@ -16,23 +16,11 @@ module Api
 			end
 
 			def student_enroll
-				errors = []
 				params[:courses].each do |course|
-					@enrollment = CourseEnrollment.new(
-							user_id: current_api_user.id,
-							course_id: Course.find_by(course_code: course)
-					)
-
-					unless @enrollment.save!
-						errors.push(@enrollment.errors)
-					end
+					current_api_user.courses << Course.find_by(course_code: course.upcase)
 				end
 
-				if errors.empty?
-					render json: current_api_user.course_enrollements, status: :created
-				else
-					render json: {message: "There were some errors...", errors: errors}, status: :ok
-				end
+				render json: current_api_user.courses, status: :created
 			end
 
 			private
