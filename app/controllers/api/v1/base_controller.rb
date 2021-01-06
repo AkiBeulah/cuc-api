@@ -1,7 +1,7 @@
 module Api
 	module V1
 		class BaseController < ApplicationController
-			before_action :authenticate_api_user!, only: %i[student_enroll]
+			before_action :authenticate_api_user!, only: %i[student_enroll status]
 
 			def query
 				@timetable = Timetable.search(params[:query])
@@ -21,6 +21,10 @@ module Api
 				end
 
 				render json: current_api_user.courses, status: :created
+			end
+
+			def check_status
+				render json: {status: 'logged in'}, status: :ok
 			end
 
 			private

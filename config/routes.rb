@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
 			get '/search/', to: 'base#query'
 			post '/student/enroll', to: 'base#student_enroll'
+
+      get '/status/', to: 'base#check_status' 
     end
   end
 end

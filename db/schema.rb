@@ -98,8 +98,15 @@ ActiveRecord::Schema.define(version: 2020_12_28_220703) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_admin", default: false
-    t.boolean "is_student", default: false
+    t.boolean "is_student", default: true
     t.boolean "is_lecturer", default: false
+    t.integer "level"
+    t.string "department"
+    t.string "college"
+    t.string "hall"
+    t.string "school"
+    t.string "program"
+    t.string "option"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
