@@ -9,6 +9,7 @@ class CreateTimetables < ActiveRecord::Migration[6.0]
       t.string :session
       t.string :level
 
+      t.belongs_to :course
       t.timestamps
     end
   end

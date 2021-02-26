@@ -2,8 +2,9 @@ require 'csv'
 
 module Api
   module V1
-    class AnnouncementsController < ApplicationController
-      before_action :set_announcement, only: [:show, :update, :destroy]
+    class AnnouncementsController < BaseController
+      before_action :set_announcement, only: %i[show update destroy]
+      before_action :authenticate_api_user!, only: %i[student_announcements]
 
       # GET /announcements
       # GET /announcements.json
@@ -75,6 +76,10 @@ module Api
       # DELETE /announcements/1.json
       def destroy
         @announcement.destroy
+      end
+
+      def user_announcements
+
       end
 
       private

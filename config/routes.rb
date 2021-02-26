@@ -15,10 +15,20 @@ Rails.application.routes.draw do
       resources :courses
       post '/courses/bulk_create', to: 'courses#bulk_create'
 
-			get '/search/', to: 'base#query'
+			get '/search', to: 'base#query'
+			get '/search/courses', to: 'base#search_courses'
+			get '/student/payment_confirmation', to: 'user#payment_confirmation'
 			post '/student/enroll', to: 'base#student_enroll'
+			post '/student/register_rfuid', to: 'user#register_rfuid'
+			post '/student/create_transaction', to: 'user#funding_transaction'
+			post '/student/payment_transaction', to: 'user#payment_transaction'
+			get '/student/get_balance', to: 'user#get_balance'
+			patch '/student/toggle_card_enabled', to: 'user#toggle_card'
 
-      get '/status/', to: 'base#check_status' 
+			get '/student/schedule', to: 'base#get_schedule'
+			get '/student/announcements', to: 'user#tailor_announcements'
+
+      get '/status/', to: 'base#check_status'
     end
   end
 end

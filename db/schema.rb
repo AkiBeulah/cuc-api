@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_28_220703) do
+ActiveRecord::Schema.define(version: 2021_01_16_191311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -21,17 +21,18 @@ ActiveRecord::Schema.define(version: 2020_12_28_220703) do
     t.string "subtitle"
     t.text "body"
     t.integer "level", default: 0, null: false
-    t.string "department", default: "all", null: false
-    t.string "college", default: "all", null: false
-    t.string "hall", default: "all", null: false
-    t.string "program", default: "all", null: false
+    t.string "department", default: "*", null: false
+    t.string "college", default: "*", null: false
+    t.string "hall", default: "*", null: false
+    t.string "program", default: "*", null: false
     t.string "url"
-    t.date "expiry", default: "2021-01-07", null: false
+    t.string "users"
+    t.date "expiry", default: "2021-02-10", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "course_enrollments", force: :cascade do |t|
+  create_table "course_enrollments", id: false, force: :cascade do |t|
     t.bigint "course_id"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
@@ -71,8 +72,10 @@ ActiveRecord::Schema.define(version: 2020_12_28_220703) do
     t.string "time", limit: 11
     t.string "session"
     t.string "level"
+    t.bigint "course_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_timetables_on_course_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -107,6 +110,8 @@ ActiveRecord::Schema.define(version: 2020_12_28_220703) do
     t.string "school"
     t.string "program"
     t.string "option"
+    t.string "first_name", default: ""
+    t.string "last_name", default: ""
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

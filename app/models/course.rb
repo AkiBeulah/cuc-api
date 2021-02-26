@@ -12,10 +12,11 @@ class Course < ApplicationRecord
 	#, :course_description, :course_grouping, :course_unit ]
 
 	has_many :users
+	has_many :timetables
 	has_many :users, through: :course_enrollments
 
 	validates :course_code, presence: true, uniqueness: true
-	validates :course_title, presence: true, uniqueness: true
+	validates :course_title, presence: true
 	validates :course_grouping, presence: true
 	validates :course_unit, presence: true
 	validates :course_unit_temp, presence: true

@@ -36,25 +36,43 @@ module Api
 					timetable_name = csv.original_filename
 					timetable_headers = CSV.read(csv, :headers => true).headers
 					CSV.foreach(csv, headers: true) do |row|
-						for i in 2..13 do
+						(2..13).each { |i|
 							if row[i]
-								@timetable = Timetable.new(
-										course_code: row[i].downcase!,
+								if Course.find_by(course_code: row[i][0,6].downcase)
+									@course = Course.find_by(course_code: row[i][0,6].downcase)
+								else
+									@course = Course.new(course_code: row[i][0,6].downcase!)
+
+									if @course.save!(validate: false)
+										counter.push({
+																		 course_code: row[i],
+																		 errors: "Course does not exist and has been blank registered. Will need update"
+																 })
+									end
+								end
+
+								@timetable = {
+										course_code: row[i][0,6].downcase!,
 										building: row[0],
 										venue: row[1],
 										time: timetable_headers[i],
 										day: timetable_name[0, timetable_name.index("_")],
 										session: timetable_name[timetable_name.index("_") + 1],
 										level: row[i][3, 1].to_i * 100
-								)
-
-
-								authorize @timetable
-								unless @timetable.save!
-									counter.push(@timetable.errors)
+								}
+								authorize @course
+								unless @course.timetables.create(@timetable)
+									counter.push({
+																	 course_code: row[1],
+																	 building: row[0],
+																	 venue: row[1],
+																	 time: timetable_headers[i],
+																	 day: timetable_name[0, timetable_name.index("_")],
+																	 errors: @timetable.errors
+															 })
 								end
 							end
-						end
+						}
 					end
 				end
 

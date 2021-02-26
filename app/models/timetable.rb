@@ -11,6 +11,7 @@ class Timetable < ApplicationRecord
 			:trigram => {}
 	}
 
+	belongs_to :course
 
 	validates :time, presence: true
 	validates :building, presence: true

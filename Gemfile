@@ -8,7 +8,7 @@ gem 'pg', '>= 0.18', '< 2.0' #database
 gem 'puma', '~> 4.1' #server
 gem 'jbuilder', '~> 2.7' #json rendering
 gem 'redis', '~> 4.0' #websockets
-gem 'bcrypt', '~> 3.1.7' #encryption
+gem "bcrypt", "~> 3.1.1" #encryption
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'rack-cors' # cors
 gem 'devise_token_auth' # authentication
